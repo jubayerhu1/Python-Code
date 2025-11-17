@@ -1,0 +1,41 @@
+The requirements.txt file in Python is a plain text file that lists all the external Python packages and their specific versions required by a particular project. 
+Its primary purpose is to ensure that anyone working on or deploying the project can easily replicate the exact development environment by installing the necessary dependencies. 
+
+Here's why requirements.txt is crucial:
+
+Dependency Management: It provides a clear and concise record of all the project's dependencies, preventing the need to manually track and install each one.
+Environment Consistency: By specifying exact package versions, it ensures that the project runs consistently across different machines and environments, minimizing compatibility issues.
+
+Reproducibility: It enables easy setup and deployment of the project, as the required packages can be installed with a single command.
+
+Collaboration: It facilitates collaboration among developers by providing a standardized way to share and manage project dependencies.
+
+How to use requirements.txt:
+Creation: You can manually create a requirements.txt file and list the package names and versions (e.g., pandas==1.3.2, numpy>=1.21.0). Alternatively, you can use pip freeze > requirements.txt to automatically generate a file containing all currently installed packages in your environment.
+Installation: To install the packages listed in a requirements.txt file, 
+
+example:
+----------------
+pandas
+mumpy
+
+-------------------
+
+or 
+pandas==1.3.2
+numpy==1.4.1
+
+
+use the command to install:
+pip install -r requirements.txt
+
+
+pip uninstall -r to_remove.txt
+  
+  note : -r means read
+---------------------
+install :
+pip install pandas
+uninstall:
+pip uninstall pandas
+
