@@ -1,0 +1,50 @@
+
+Module 4,5 :
+
+
+
+
+
+
+
+In Python, control statements are programming constructs that determine the order in which instructions are executed within a program. They allow for decision-making, repetition, and managing the flow of execution, enabling programs to respond dynamically to conditions and perform complex tasks.
+There are several types of control statements in Python: Conditional Statements (Selection Control).
+These statements allow the program to execute different blocks of code based on whether a certain condition is true or false. 
+if statement: Executes a block of code if a condition is true.
+if-else statement: Executes one block of code if a condition is true, and another block if the condition is false.
+if-elif-else statement: Allows for multiple conditions to be checked sequentially, executing the block of code corresponding to the first true condition.
+match-case statement (Python 3.10+): Provides pattern matching for more complex conditional logic, similar to switch-case in other languages.
+Python
+
+    age = 20
+    if age >= 18:
+        print("Adult")
+    else:
+        print("Minor")
+Looping Statements (Repetition Control).
+These statements allow a block of code to be executed repeatedly.
+for loop: Iterates over a sequence (e.g., list, tuple, string, range) and executes a block of code for each item.
+while loop: Repeatedly executes a block of code as long as a condition remains true.
+Python
+
+    for i in range(3):
+        print(i)
+
+    count = 0
+    while count < 3:
+        print(count)
+        count += 1
+loop control statements.
+These statements are used within loops to modify their behavior.
+break statement: Terminates the loop prematurely and transfers control to the statement immediately following the loop.
+continue statement: Skips the rest of the current iteration of a loop and proceeds to the next iteration.
+pass statement: A null operation; it does nothing. It can be used as a placeholder where a statement is syntactically required but no action is desired.
+Python
+
+    for i in range(5):
+        if i == 2:
+            continue  # Skips printing 2
+        if i == 4:
+            break    # Exits the loop before printing 4
+        print(i)
+Control statements are essential for creating dynamic and functional Python programs, enabling them to make decisions, perform repetitive tasks, and handle various scenarios effectively.
