@@ -1,0 +1,12 @@
+mongodb+srv://jubayerhu1:151983Ju@@cluster0.kigbqus.mongodb.net/?appName=Cluster0
+
+
+---------------
+
+mongodb+srv://jubayerhu1:jubayer@cluster0.fgktxi7.mongodb.net/?appName=Cluster0
+
+python -m pip install "pymongo[srv]==3.12"
+
+
+environment 
+name is --  jub
