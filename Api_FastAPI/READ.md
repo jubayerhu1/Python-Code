@@ -22,14 +22,17 @@ To get your environment up and running, follow these steps in your terminal:
 Create a dedicated virtual environment using Conda to ensure dependency isolation:
 
 Bash
-
-conda create -n myenv python=3.11 -y
+```
+conda create -n jub python=3.11 -y
+```
 2. Activation
 Activate the newly created environment:
 
 Bash
+```
+conda activate jub
+```
 
-conda activate myenv
 3. Dependency Installation
 Install the required packages, including FastAPI and an ASGI server (like Uvicorn):
 ```
