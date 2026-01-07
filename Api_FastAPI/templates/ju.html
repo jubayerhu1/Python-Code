@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tea Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      color: #2b6cb0;
+    }
+    .container {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+    form {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 8px;
+      width: 260px;
+    }
+    label {
+      display: block;
+      margin-top: 8px;
+    }
+    input {
+      width: 100%;
+      padding: 6px;
+      margin-top: 2px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 12px;
+      padding: 8px 12px;
+      background-color: #2b6cb0;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #23456d;
+    }
+    table {
+      border-collapse: collapse;
+      width: 400px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f3f3f3;
+    }
+    .actions button {
+      background-color: #e53e3e;
+      margin-left: 4px;
+    }
+    .actions button.update {
+      background-color: #38a169;
+    }
+    #message {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #2f855a;
+    }
+    #error {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #e53e3e;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tea Manager UI</h1>
+  <p>Backend: http://localhost:8081</p>
+
+  <div class="container">
+    <!-- Form column -->
+    <div>
+      <form id="tea-form">
+        <h3>Add / Update Tea</h3>
+        <label for="id">ID</label>
+        <input type="number" id="id" required>
+
+        <label for="name">Name</label>
+        <input type="text" id="name" required>
+
+        <label for="orgin">Origin</label>
+        <input type="text" id="orgin" required>
+
+        <button type="submit">Save Tea</button>
+      </form>
+
+      <div id="message"></div>
+      <div id="error"></div>
+    </div>
+
+    <!-- Table column -->
+    <div>
+      <h3>Tea List</h3>
+      <button onclick="fetchTeas()">Refresh List</button>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Origin</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="teas-body">
+          <!-- Filled by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:8081';
+
+    const teasBody = document.getElementById('teas-body');
+    const teaForm = document.getElementById('tea-form');
+    const messageDiv = document.getElementById('message');
+    const errorDiv = document.getElementById('error');
+
+    function clearMessages() {
+      messageDiv.textContent = '';
+      errorDiv.textContent = '';
+    }
+
+    async function fetchTeas() {
+      clearMessages();
+      try {
+        const res = await fetch(API_BASE + '/getteas');
+        if (!res.ok) throw new Error('Failed to fetch teas');
+        const data = await res.json();
+
+        teasBody.innerHTML = '';
+        data.forEach(tea => {
+          const tr = document.createElement('tr');
+
+          const idTd = document.createElement('td');
+          idTd.textContent = tea.id;
+
+          const nameTd = document.createElement('td');
+          nameTd.textContent = tea.name;
+
+          const orginTd = document.createElement('td');
+          orginTd.textContent = tea.orgin;
+
+          const actionsTd = document.createElement('td');
+          actionsTd.className = 'actions';
+
+          const editBtn = document.createElement('button');
+          editBtn.textContent = 'Edit';
+          editBtn.className = 'update';
+          editBtn.onclick = () => fillFormForEdit(tea);
+
+          const delBtn = document.createElement('button');
+          delBtn.textContent = 'Delete';
+          delBtn.onclick = () => deleteTea(tea.id);
+
+          actionsTd.appendChild(editBtn);
+          actionsTd.appendChild(delBtn);
+
+          tr.appendChild(idTd);
+          tr.appendChild(nameTd);
+          tr.appendChild(orginTd);
+          tr.appendChild(actionsTd);
+
+          teasBody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error(err);
+        errorDiv.textContent = 'Error loading teas: ' + err.message;
+      }
+    }
+
+    function fillFormForEdit(tea) {
+      document.getElementById('id').value = tea.id;
+      document.getElementById('name').value = tea.name;
+      document.getElementById('orgin').value = tea.orgin;
+      clearMessages();
+      messageDiv.textContent = 'Editing tea with ID ' + tea.id;
+    }
+
+    // Add / Update submit
+    teaForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const id = Number(document.getElementById('id').value);
+      const name = document.getElementById('name').value.trim();
+      const orgin = document.getElementById('orgin').value.trim();
+
+      if (!id || !name || !orgin) {
+        errorDiv.textContent = 'All fields are required.';
+        return;
+      }
+
+      const teaObj = { id, name, orgin };
+
+      // Decide if we call POST or PUT:
+      // Check if this ID already exists in current table
+      const existingIds = Array.from(teasBody.querySelectorAll('tr')).map(tr =>
+        Number(tr.children[0].textContent)
+      );
+      const isUpdate = existingIds.includes(id);
+
+      try {
+        let res;
+        if (isUpdate) {
+          // UPDATE
+          res = await fetch(`${API_BASE}/updatetea/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(teaObj)
+          });
+        } else {
+          // CREATE
+          res = await fetch(API_BASE + '/addtes', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(teaObj)
+          });
+        }
+
+        const data = await res.json();
+
+        if (!res.ok || data.err || data.error) {
+          errorDiv.textContent = 'Error: ' + (data.err || data.error || res.statusText);
+        } else {
+          messageDiv.textContent = isUpdate ? 'Tea updated.' : 'Tea added.';
+          teaForm.reset();
+          fetchTeas();
+        }
+      } catch (err) {
+        console.error(err);
+        errorDiv.textContent = 'Request failed: ' + err.message;
+      }
+    });
+
+    async function deleteTea(id) {
+      clearMessages();
+      if (!confirm('Delete tea with ID ' + id + '?')) return;
+      try {
+        const res = await fetch(`${API_BASE}/deletetea/${id}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        if (!res.ok || data.error) {
+          errorDiv.textContent = 'Error deleting tea: ' + (data.error || res.statusText);
+        } else {
+          messageDiv.textContent = 'Tea deleted.';
+          fetchTeas();
+        }
+      } catch (err) {
+        console.error(err);
+        errorDiv.textContent = 'Delete failed: ' + err.message;
+      }
+    }
+
+    // Load data on page open
+    fetchTeas();
+  </script>
+</body>
+</html>
