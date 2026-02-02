@@ -4,6 +4,10 @@ Exception Handling in Python | Python for AI #67
 
 
 # Exception Handling in Python
+
+    What is the Exception?
+    An exception is a problem that arises during the execution of a program. 
+
 - There are 2 stages where error may happen in a program
 
         - During compliation -> Syntax Error
@@ -21,6 +25,21 @@ Exception Handling in Python | Python for AI #67
 - Exception are rised by python runtime (runtime error)
 - You have to takle is on the fly
 
+<br>
+What is an Exception?
+An exception is an error that occurs while your program is running (not a syntax error). Examples:
+
+Dividing by zero: ZeroDivisionError
+Using an undefined variable: NameError
+Accessing a missing file: FileNotFoundError
+Converting invalid text to a number: ValueError
+When an exception happens, Python:
+
+Stops normal execution at that line
+Looks for code that can handle the exception
+If none is found, the program crashes with a traceback
+<br>
+
 #### Examples:
 - Memory overflow
 - Divide by - -> logical error
@@ -31,6 +50,7 @@ Exception Handling in Python | Python for AI #67
 - why is it important to handle exceptions?
 - How to handle exception - > Try except block
 <br>
+
  - load big data is your system it will show error | it is runtime error 
  - you connect data base of sql . sql server connection is error. your program is good but connection is error it is called runtime error.
 - there are somthing going on, but cod is good.
