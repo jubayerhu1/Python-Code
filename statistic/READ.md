@@ -25,3 +25,12 @@ e.g : try out inside | visualizing data summerizing to separte, Name ,age , city
 Inferential statistics: It consists of using data you have measure to from a conclusion. 
 eg. House price- measure to performe conclusion 
 eg. Area , Number Room , base on house prices.
+<hr>
+
+Descriptive statistics:
+
+1. Measure of Central Tendency ( mean, median, mode)
+
+2. Measure of Dispersion (varience , standard deviation )
+
+3. Different type fo Distribution (Ploting , Graph, Histogram , picChart)
