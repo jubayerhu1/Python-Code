@@ -5,3 +5,8 @@ mongodb+srv://jubayerhu1:jubayerhu1@cluster0.olevxba.mongodb.net/?appName=Cluste
 
 jubayerhu1
 jubayerhu1
+
+
+2nd 
+conectionname : 
+mongodb+srv://jubayerhu1:jubayerhu1@cluster0.pzqms7q.mongodb.net/?appName=Cluster0
