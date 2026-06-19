@@ -1,0 +1,41 @@
+his code uses matplotlib and seaborn to create a side-by-side visual comparison of your data before and after feature scaling (like Standardization or MinMax Scaling).
+
+It is a crucial visualization in data science to confirm that your scaling worked correctly without altering the underlying distribution of your data.
+
+Here is the line-by-line breakdown of what is happening:
+
+1. Setting up the Canvas
+Python
+fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(12, 5))
+plt.subplots(ncols=2, ...): This tells matplotlib to create a single figure window (fig) split into 2 columns side-by-side.
+
+(ax1, ax2): This unpacks those two columns into separate plotting axes. Think of ax1 as the left canvas and ax2 as the right canvas.
+
+figsize=(12, 5): Sets the total width of the window to 12 inches and the height to 5 inches.
+
+2. Plotting the Unscaled Data (Left Side)
+Python
+ax1.set_title('Before Scaling -')
+sns.kdeplot(X_train['Age'], ax=ax1)
+sns.kdeplot(X_train['EstimatedSalary'], ax=ax1)
+ax1.set_title(...): Puts a title on the left plot.
+
+sns.kdeplot(..., ax=ax1): Draws a Kernel Density Estimate (KDE) plot, which is a smoothed-out version of a histogram showing the distribution of the data.
+
+ax=ax1: This is the magic argument. It explicitly tells Seaborn to draw these curves onto the left canvas. Because both 'Age' and 'EstimatedSalary' are directed to ax1, they will overlap on the same graph.
+
+💡 Why this looks weird unscaled: Age values usually range from 18 to 80, while EstimatedSalary ranges from 15,000 to 150,000. On the same plot, the Age curve will look like a completely flat, invisible line squeezed at zero compared to the massive salary numbers.
+
+3. Plotting the Scaled Data (Right Side)
+Python
+ax2.set_title(' After scaling ')
+sns.kdeplot(X_train_scaled['Age'], ax=ax2)
+sns.kdeplot(X_train_scaled['EstimatedSalary'], ax=ax2)
+This does the exact same thing as step 2, but grabs the data from your X_train_scaled dataset and prints it onto ax2 (the right canvas).
+
+What you should look for in the final output:
+When you look at the final generated image, you want to see two things:
+
+The scales changed: On the left plot (ax1), the X-axis will span into the tens of thousands. On the right plot (ax2), both features will now share the exact same scale (e.g., -3 to 3 for Standard Scaling or 0 to 1 for MinMax).
+
+The shapes are identical: The actual peaks and valleys of the curves should look exactly the same on both sides. Scaling changes the range of the data, but it should never warp its shape.
