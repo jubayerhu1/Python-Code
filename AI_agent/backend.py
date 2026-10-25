@@ -157,8 +157,8 @@ Important:
         "llm_calls":state.get("llm_calls", 0)+1
     }
 # checkpointer
-connect = sqlite3.connect(database='travel.db', check_same_thread=False)
-checkpoint = SqliteSaver(connect)
+conn = sqlite3.connect(database='travel.db', check_same_thread=False)
+checkpoint = SqliteSaver(conn)
 
 # #====================================
 # Build Graph
@@ -178,3 +178,49 @@ graph.add_edge("itinerary_agent", "final_agen")
 graph.add_edge("final_agent", END)
 
 travel_graph = graph.compile(checkpointer=checkpoint)
+
+#========================
+# function for Fast Api
+#==============================
+
+def run_travel_agent(user_input: str, thread_id: str | None = None):
+    if not thread_id:
+        thread_id = f"user_{uuid.uuid4().hex}"
+
+    config = {
+        "configurable": {
+            "thread_id": thread_id
+        }
+    }
+
+    result = travel_graph.invoke(
+        {
+            "messages": [
+                HumanMessage(content=user_input)
+            ],
+            "user_query": user_input,
+            "flight_results": "",
+            "hotel_results": "",
+            "itinerary": "",
+            "llm_calls": 0
+        },
+        config=config
+    )
+
+    final_answer = result["messages"][-1].content
+
+    return {
+        "thread_id": thread_id,
+        "answer": final_answer,
+        "flight_results": result.get("flight_results", ""),
+        "hotel_results": result.get("hotel_results", ""),
+        "itinerary": result.get("itinerary", ""),
+        "llm_calls": result.get("llm_calls", 0),
+    }
+
+
+
+
+
+response = run_travel_agent("Plan a 7 days Japan trip from Bangladesh")
+print(response)
